@@ -80,6 +80,31 @@ app.post('/upload', upload.single('file'), async (req, res) => {
     }
 });
 
+app.post('/create-folder', async (req, res) => {
+    try {
+        const folderName = req.body.folderName; // Folder name from the request
+
+        if (!folderName || folderName.trim() === '') {
+            return res.status(400).send('Folder name is required.');
+        }
+
+        // Ensure the folder name ends with a slash
+        const folderPath = folderName.endsWith('/') ? folderName : `${folderName}/`;
+
+        // Create an empty object to simulate the folder
+        const file = bucket.file(folderPath);
+        await file.save(''); // Save an empty file
+
+        console.log(`Folder "${folderPath}" created successfully.`);
+
+        // Redirect to homepage with a success message
+        res.redirect(`/?message=Folder "${folderPath}" created successfully.`);
+    } catch (error) {
+        console.error('Error creating folder:', error);
+        res.redirect(`/?error=An error occurred while creating the folder.`);
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Server started at PORT:${PORT}`);
 });
