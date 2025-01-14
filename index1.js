@@ -6,8 +6,18 @@ const multer = require('multer');
 const { Storage } = require('@google-cloud/storage');
 require('dotenv').config();
 
+const cookieParser = require("cookie-parser");
+const { connectToMongoDB } = require("./connect");
+const { restrictToLoggedinUserOnly, checkAuth } = require("./middlewares/auth");
+const staticRoute = require("./routes/staticRouter");
+const userRoute = require("./routes/user");
+
 const app = express();
 const PORT = 8000;
+
+connectToMongoDB(process.env.MONGODB ?? "mongodb://localhost:27017/userauthentication").then(() =>
+  console.log("Mongodb connected")
+);
 
 // Debug environment variables
 console.log('Environment Variables:');
@@ -21,6 +31,11 @@ if (!process.env.BUCKET_NAME) {
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+//User authentication
+app.use(cookieParser());
+app.use("/user", userRoute);
+app.use("/", checkAuth, staticRoute);
 
 // Configure multer to store files in memory instead of disk
 const storage = multer.memoryStorage();
