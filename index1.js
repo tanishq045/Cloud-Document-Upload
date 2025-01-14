@@ -107,6 +107,28 @@ app.post('/create-folder', async (req, res) => {
     }
 });
 
+app.get('/list-pdfs', async (req, res) => {
+    try {
+        const [files] = await bucket.getFiles();
+        const pdfFiles = await Promise.all(
+            files
+                .filter(file => file.name.endsWith('.pdf'))
+                .map(async (file) => {
+                    const [signedUrl] = await file.getSignedUrl({
+                        action: 'read',
+                        expires: Date.now() + 60 * 60 * 1000 // 1 hour expiration
+                    });
+                    return { name: file.name, url: signedUrl };
+                })
+        );
+
+        res.json(pdfFiles);
+    } catch (error) {
+        console.error('Error fetching PDF files:', error);
+        res.status(500).json({ error: 'Failed to fetch PDF files.' });
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Server started at PORT:${PORT}`);
 });
