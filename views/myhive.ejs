@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocHive Sidebar</title>
+    <link rel="icon" href="/favicon.png" type="image/png">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            background-color: white;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #02343F;
+            color: white;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 12px;
+        }
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+        }
+        .sidebar-logo img {
+            width: 32px;
+            height: auto;
+            margin-right: 12px;
+        }
+        .sidebar-logo h1 {
+            font-size: 24px;
+            margin: 0;
+            color: #F0EDCC;
+        }
+        .sidebar-menu {
+            list-style: none;
+            padding: 20px 0;
+            margin: 0;
+        }
+        .sidebar-menu li {
+            margin: 8px 0;
+        }
+        .sidebar-menu a {
+            text-decoration: none;
+            color: #F0EDCC;
+            font-size: 16px;
+            display: block;
+            padding: 12px 20px;
+            transition: background-color 0.2s;
+        }
+        .sidebar-menu a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+            background-color: #F0EDCC;
+            overflow-y: auto;
+        }
+
+        .folder-container, .pdf-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 8px;
+            padding: 20px;
+        }
+
+        .folder-item, .pdf-item {
+            background-color: #2f2f2f;
+            padding: 8px 16px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            max-width: 100%;
+        }
+
+        .folder-item:hover, .pdf-item:hover {
+            background-color: #3f3f3f;
+        }
+
+        .folder, .pdf {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            min-width: 0;
+        }
+
+        .folder-icon, .pdf-icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .folder span, .pdf span {
+            font-size: 14px;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex: 1;
+        }
+
+        .empty-state {
+            background-color: #2f2f2f;
+            padding: 8px 16px;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            text-align: center;
+            width: fit-content;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin: 1px 0;
+            color: #02343F;
+            padding-left: 20px;
+        }
+
+        .pdf-link {
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            gap: 12px;
+            width: 100%;
+        }
+    /* Breadcrumb styles */
+        .breadcrumb {
+            font-size: 14px;
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+
+        .breadcrumb a {
+            color: #02343F;
+            text-decoration: none;
+            margin-right: 8px;
+        }
+
+        .breadcrumb span {
+            color: #02343F;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            <img src="/favicon.png" alt="DocHive Logo">
+            <h1>DocHive</h1>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="#">New Folder</a></li>
+            <li><a href="#">File Upload</a></li>
+            <li><a href="#">My Hive</a></li>
+            <li><a href="#">Statistics</a></li>
+            <li><a href="#">Hive AI</a></li>
+            <li><a href="#">Admin Console</a></li>
+            <li><a href="#">Rujul Pawar</a></li>
+        </ul>
+    </div>
+
+     <div class="content">
+        <!-- Breadcrumb Navigation -->
+        <div class="breadcrumb">
+            <a href="/myhive">Home</a>
+            <% let currentPath = ''; %>
+            <% if (breadcrumbs && breadcrumbs.length > 0) { %>
+                <% breadcrumbs.forEach((crumb, index) => { %>
+                    <% currentPath += (currentPath ? '/' : '') + crumb; %>
+                    <span>></span>
+                    <a href="/myhive/<%= currentPath %>"><%= crumb %></a>
+                <% }); %>
+            <% } %>
+        </div>
+
+        <!-- Folders Section -->
+        <h2>Folders</h2>
+        <% if (folders && folders.length > 0) { %>
+            <div class="folder-container">
+                <% folders.forEach(function(folder) { %>
+                    <div class="folder-item">
+                        <a href="/myhive/<%= currentFolder ? `${currentFolder}/${folder}` : folder %>">
+                            <div class="folder">
+                                <img src="/foldericon.png" alt="Folder" class="folder-icon">
+                                <span><%= folder %></span>
+                            </div>
+                        </a>
+                    </div>
+                <% }); %>
+            </div>
+        <% } else { %>
+            <div class="folder-container">
+                <div class="empty-state">
+                    No Folders Found
+                </div>
+            </div>
+        <% } %>
+
+        <!-- PDF Files Section -->
+        <h2>Files</h2>
+        <% if (pdfFiles && pdfFiles.length > 0) { %>
+            <div class="pdf-container">
+                <% pdfFiles.forEach(function(pdf) { %>
+                    <div class="pdf-item">
+                        <a href="<%= pdf.url %>" class="pdf-link">
+                            <img src="/pdficon.png" alt="PDF" class="pdf-icon">
+                            <span><%= pdf.name %></span>
+                        </a>
+                    </div>
+                <% }); %>
+            </div>
+        <% } else { %>
+            <div class="pdf-container">
+                <div class="empty-state">
+                    No Files Found
+                </div>
+            </div>
+        <% } %>
+    </div>
+
+</body>
+</html>
