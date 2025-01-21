@@ -81,7 +81,7 @@ async function getFilesAndFolders(prefix = '') {
 
 // Route for login page
 app.get('/', (req, res) => {
-    return res.render("trial", { errorMessage: null });
+    return res.render("login", { errorMessage: null });
 });
 
 // Route to handle login submission
@@ -95,7 +95,7 @@ app.post('/login', (req, res) => {
     if (email === mockUser.email && password === mockUser.password) {
         return res.redirect('/myhive');
     }
-    res.render('trial', { errorMessage: 'Invalid Email or Password' });
+    res.render('login', { errorMessage: 'Invalid Email or Password' });
 });
 
 // Route for MyHive root
@@ -144,6 +144,28 @@ app.get('/myhive/*', async (req, res) => {
             breadcrumbs: [],
             errorMessage: 'Error fetching files from Google Cloud Storage'
         });
+    }
+});
+
+// Route to view PDF in DocHive
+app.get('/view-pdf', async (req, res) => {
+    const { file } = req.query;
+
+    if (!file) {
+        return res.status(400).send('File parameter is required.');
+    }
+
+    try {
+        // Get the file from the bucket
+        const [signedUrl] = await bucket.file(file).getSignedUrl({
+            action: 'read',
+            expires: Date.now() + 60 * 60 * 1000 // 1 hour expiration
+        });
+
+        res.render('pdfviewer', { fileUrl: signedUrl, fileName: path.basename(file) });
+    } catch (error) {
+        console.error('Error generating signed URL:', error);
+        res.status(500).send('Error loading PDF');
     }
 });
 

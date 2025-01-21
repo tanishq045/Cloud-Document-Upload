@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DocHive Sidebar</title>
+    <title>DocHive</title>
     <link rel="icon" href="/favicon.png" type="image/png">
     <style>
         body {
@@ -108,6 +108,12 @@
             flex: 1;
         }
 
+        .folder-item a, .pdf-item a {
+            text-decoration: none; /* Remove underline */
+            color: white; /* Ensure the text color remains consistent */
+            overflow: hidden;
+        }
+
         .empty-state {
             background-color: #2f2f2f;
             padding: 8px 16px;
@@ -133,22 +139,35 @@
             font-size: 14px;
             gap: 12px;
             width: 100%;
+            white-space: nowrap;
         }
+
     /* Breadcrumb styles */
         .breadcrumb {
             font-size: 14px;
-            margin-bottom: 20px;
-            padding-left: 20px;
+            margin: 12px 20px;
+            padding: 8px 16px;
+            background-color: rgba(32, 33, 36, 0.9);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            max-width: fit-content;
         }
 
         .breadcrumb a {
-            color: #02343F;
+            color: #ffffff;
             text-decoration: none;
             margin-right: 8px;
+            font-weight: 500;
         }
 
         .breadcrumb span {
-            color: #02343F;
+            color: #9aa0a6;
+            margin: 0 4px;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: none;
         }
     </style>
 </head>
@@ -172,7 +191,7 @@
      <div class="content">
         <!-- Breadcrumb Navigation -->
         <div class="breadcrumb">
-            <a href="/myhive">Home</a>
+            <a href="/myhive">My Hive</a>
             <% let currentPath = ''; %>
             <% if (breadcrumbs && breadcrumbs.length > 0) { %>
                 <% breadcrumbs.forEach((crumb, index) => { %>
@@ -212,7 +231,7 @@
             <div class="pdf-container">
                 <% pdfFiles.forEach(function(pdf) { %>
                     <div class="pdf-item">
-                        <a href="<%= pdf.url %>" class="pdf-link">
+                        <a href="/view-pdf?file=<%= pdf.fullPath %>" class="pdf-link">
                             <img src="/pdficon.png" alt="PDF" class="pdf-icon">
                             <span><%= pdf.name %></span>
                         </a>
