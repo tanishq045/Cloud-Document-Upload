@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View PDF - DocHive</title>
+    <link rel="icon" href="/favicon.png" type="image/png">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .header {
+            background-color: #02343F;
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .header-left img {
+            width: 24px;
+            height: 24px;
+        }
+        .header h1 {
+            font-size: 16px;
+            margin: 0;
+        }
+        .pdf-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .go-back {
+            color: #F0EDCC;
+            text-decoration: none;
+            cursor: pointer;
+            background-color: transparent;
+            border: none;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <img src="/pdficon.png" alt="PDF Icon">
+            <h1><%= fileName %></h1>
+        </div>
+        <button class="go-back" onclick="goBack()">Go Back</button>
+    </div>
+    <div class="pdf-container">
+        <iframe src="<%= fileUrl %>"></iframe>
+    </div>
+    <script>
+        function goBack() {
+            if (document.referrer) {
+                // If there's a referring page, navigate to it
+                window.location.href = document.referrer;
+            } else {
+                // Fallback to the /myhive page if there's no referrer
+                window.location.href = '/myhive';
+            }
+        }
+    </script>
+</body>
+</html>
