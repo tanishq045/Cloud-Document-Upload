@@ -5,171 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DocHive</title>
     <link rel="icon" href="/favicon.png" type="image/png">
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            display: flex;
-            background-color: white;
-        }
-        .sidebar {
-            width: 250px;
-            background-color: #02343F;
-            color: white;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            padding: 12px;
-        }
-        .sidebar-logo {
-            display: flex;
-            align-items: center;
-            padding: 20px;
-        }
-        .sidebar-logo img {
-            width: 32px;
-            height: auto;
-            margin-right: 12px;
-        }
-        .sidebar-logo h1 {
-            font-size: 24px;
-            margin: 0;
-            color: #F0EDCC;
-        }
-        .sidebar-menu {
-            list-style: none;
-            padding: 20px 0;
-            margin: 0;
-        }
-        .sidebar-menu li {
-            margin: 8px 0;
-        }
-        .sidebar-menu a {
-            text-decoration: none;
-            color: #F0EDCC;
-            font-size: 16px;
-            display: block;
-            padding: 12px 20px;
-            transition: background-color 0.2s;
-        }
-        .sidebar-menu a:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .content {
-            flex: 1;
-            padding: 20px;
-            background-color: #F0EDCC;
-            overflow-y: auto;
-        }
-
-        .folder-container, .pdf-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 8px;
-            padding: 20px;
-        }
-
-        .folder-item, .pdf-item {
-            background-color: #2f2f2f;
-            padding: 8px 16px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            max-width: 100%;
-        }
-
-        .folder-item:hover, .pdf-item:hover {
-            background-color: #3f3f3f;
-        }
-
-        .folder, .pdf {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            width: 100%;
-            min-width: 0;
-        }
-
-        .folder-icon, .pdf-icon {
-            width: 20px;
-            height: 20px;
-            flex-shrink: 0;
-        }
-
-        .folder span, .pdf span {
-            font-size: 14px;
-            color: white;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            flex: 1;
-        }
-
-        .folder-item a, .pdf-item a {
-            text-decoration: none; /* Remove underline */
-            color: white; /* Ensure the text color remains consistent */
-            overflow: hidden;
-        }
-
-        .empty-state {
-            background-color: #2f2f2f;
-            padding: 8px 16px;
-            border-radius: 8px;
-            color: white;
-            font-size: 14px;
-            text-align: center;
-            width: fit-content;
-        }
-
-        h2 {
-            font-size: 20px;
-            margin: 1px 0;
-            color: #02343F;
-            padding-left: 20px;
-        }
-
-        .pdf-link {
-            text-decoration: none;
-            color: white;
-            display: flex;
-            align-items: center;
-            font-size: 14px;
-            gap: 12px;
-            width: 100%;
-            white-space: nowrap;
-        }
-
-    /* Breadcrumb styles */
-        .breadcrumb {
-            font-size: 14px;
-            margin: 12px 20px;
-            padding: 8px 16px;
-            background-color: rgba(32, 33, 36, 0.9);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            max-width: fit-content;
-        }
-
-        .breadcrumb a {
-            color: #ffffff;
-            text-decoration: none;
-            margin-right: 8px;
-            font-weight: 500;
-        }
-
-        .breadcrumb span {
-            color: #9aa0a6;
-            margin: 0 4px;
-        }
-
-        .breadcrumb a:hover {
-            text-decoration: none;
-        }
-    </style>
+    <link rel="stylesheet" href="/views/styles.css">
 </head>
 <body>
     <div class="sidebar">
@@ -177,18 +13,53 @@
             <img src="/favicon.png" alt="DocHive Logo">
             <h1>DocHive</h1>
         </div>
+    <div class="upload-section">
         <ul class="sidebar-menu">
-            <li><a href="#">New Folder</a></li>
-            <li><a href="#">File Upload</a></li>
-            <li><a href="#">My Hive</a></li>
-            <li><a href="#">Statistics</a></li>
-            <li><a href="#">Hive AI</a></li>
-            <li><a href="#">Admin Console</a></li>
-            <li><a href="#">Rujul Pawar</a></li>
+            <li>
+            <a href="#" id="new-folder">
+                <img src="/plusicon.png" alt="Plus Icon" class="plus-icon"> New Folder
+            </a>
+        </li>
+            <li>
+            <a href="#" id="upload-file">
+                <img src="/plusicon.png" alt="Plus Icon" class="plus-icon"> Upload File
+            </a>
+        </li>
+        <li>
+            <a href="#" id="upload-folder">
+                <img src="/plusicon.png" alt="Plus Icon" class="plus-icon"> Upload Folder
+            </a>
+        </li>
+        </ul>
+    </div>
+        <ul class="sidebar-menu">
+            <li><a href="#"><img src="/homeicon.png" alt="My Hive Icon" class="sidebar-icon"> My Hive</a></li>
+            <li><a href="#"> <img src="/analyicon.jpg" alt="Analytics Icon" class="sidebar-icon"> Analytics</a></li>
+            <li>
+                <a href="#"> <img src="/aiicon.png" alt="Hive AI Icon" class="sidebar-icon"> Hive AI</a>
+            </li>
+            <li><a href="#"><img src="/adminicon.png" alt="Admin Console Icon" class="sidebar-icon"> Admin Console</a></li>
+            <li><a href="#"><img src="/usericon.png" alt="User Icon" class="sidebar-icon"> Rujul Pawar</a></li>
         </ul>
     </div>
 
+<script src="/actions.js"></script>
+
      <div class="content">
+
+<div class="search-bar-wrapper">
+            <div class="search-bar-container">
+                <input type="text" class="search-bar" placeholder="Search in My Hive">
+                <div class="filter-dropdown">
+                    <select class="filter-select">
+                        <option value="title-content">Title and Content</option>
+                        <option value="title">Title</option>
+                        <option value="content">Content</option>
+                        <option value="tags">Tags</option>
+                    </select>
+                </div>
+            </div>
+        </div>
         <!-- Breadcrumb Navigation -->
         <div class="breadcrumb">
             <a href="/myhive">My Hive</a>
@@ -204,26 +75,30 @@
 
         <!-- Folders Section -->
         <h2>Folders</h2>
-        <% if (folders && folders.length > 0) { %>
-            <div class="folder-container">
-                <% folders.forEach(function(folder) { %>
-                    <div class="folder-item">
-                        <a href="/myhive/<%= currentFolder ? `${currentFolder}/${folder}` : folder %>">
-                            <div class="folder">
-                                <img src="/foldericon.png" alt="Folder" class="folder-icon">
-                                <span><%= folder %></span>
-                            </div>
-                        </a>
+<% if (folders && folders.length > 0) { %>
+    <div class="folder-container">
+        <% folders.forEach(function(folder) { %>
+            <div class="folder-item">
+                <a href="/myhive/<%= currentFolder ? `${currentFolder}/${folder}` : folder %>">
+                    <div class="folder">
+                        <img src="/foldericon.png" alt="Folder" class="folder-icon">
+                        <span><%= folder %></span>
                     </div>
-                <% }); %>
-            </div>
-        <% } else { %>
-            <div class="folder-container">
-                <div class="empty-state">
-                    No Folders Found
+                </a>
+                <!-- Vertical three dots for options -->
+                <div class="folder-options">
+                    <span class="vertical-dots">⋮</span>
                 </div>
             </div>
-        <% } %>
+        <% }); %>
+    </div>
+<% } else { %>
+    <div class="folder-container">
+        <div class="empty-state">
+            No Folders Found
+        </div>
+    </div>
+<% } %>
 
         <!-- PDF Files Section -->
         <h2>Files</h2>
@@ -245,6 +120,17 @@
                 </div>
             </div>
         <% } %>
+    </div>
+
+    <div id="newFolderModal" class="modal">
+        <div class="modal-content">
+            <h2>Create New Folder</h2>
+            <input type="text" id="newFolderName" placeholder="Enter folder name" />
+            <div class="modal-buttons">
+                <button class="create" onclick="confirmCreateFolder()">Create</button>
+                <button class="cancel" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
     </div>
 
 </body>
