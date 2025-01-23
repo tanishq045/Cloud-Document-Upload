@@ -153,3 +153,139 @@ document.getElementById('upload-folder').addEventListener('click', (e) => {
 
     folderInput.click();
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const optionsPanel = document.querySelector('.options-panel');
+    const optionsPanelOverlay = document.querySelector('.options-panel-overlay');
+    const closePanelBtn = document.getElementById('close-panel');
+    const downloadOption = document.getElementById('download-option');
+    const renameOption = document.getElementById('rename-option');
+    const searchBarWrapper = document.querySelector('.search-bar-wrapper');
+
+    let currentItemPath = '';
+    let currentItemType = '';
+    let currentItemName = '';
+
+    function openOptionsPanel(itemPath, itemName, itemType, iconSrc) {
+        currentItemPath = itemPath;
+        currentItemName = itemName;
+        currentItemType = itemType;
+
+        document.getElementById('item-icon').src = iconSrc;
+        document.getElementById('panel-title').textContent = itemName;
+
+        optionsPanel.classList.add('open');
+        optionsPanelOverlay.classList.add('visible');
+        searchBarWrapper.classList.add('fade');
+    }
+
+    function closeOptionsPanel() {
+        optionsPanel.classList.remove('open');
+        optionsPanelOverlay.classList.remove('visible');
+        searchBarWrapper.classList.remove('fade'); // Ensure fade is always removed
+    }
+
+    optionsPanelOverlay.addEventListener('click', closeOptionsPanel);
+    closePanelBtn.addEventListener('click', closeOptionsPanel);
+    searchBarWrapper.addEventListener('click', closeOptionsPanel);
+
+    document.querySelectorAll('.vertical-dots').forEach(dot => {
+        dot.addEventListener('click', (e) => {
+            const parentItem = e.target.closest('.pdf-item, .folder-item');
+            const isFolder = parentItem.closest('.folder-container') !== null;
+            const itemLink = parentItem.querySelector('a');
+
+            const itemPath = isFolder
+                ? itemLink.getAttribute('href').replace('/myhive/', '')
+                : itemLink.getAttribute('href').split('file=')[1];
+
+            const itemName = itemLink.querySelector('span').textContent;
+            const iconSrc = itemLink.querySelector('img').src;
+
+            openOptionsPanel(
+                itemPath,
+                itemName,
+                isFolder ? 'folder' : 'file',
+                iconSrc
+            );
+        });
+    });
+
+    downloadOption.addEventListener('click', () => {
+        if (currentItemType === 'file') {
+            window.location.href = `/download-file?file=${encodeURIComponent(currentItemPath)}`;
+        } else {
+            window.location.href = `/download-folder?folder=${encodeURIComponent(currentItemPath)}`;
+        }
+        closeOptionsPanel();
+    });
+
+    renameOption.addEventListener('click', () => {
+        openRenameModal(currentItemName);
+    });
+});
+
+// Add these functions to your actions.js
+function openRenameModal(currentName) {
+    const modal = document.getElementById('renameModal');
+    const input = document.getElementById('renameItemName');
+
+    modal.style.display = 'block';
+    modal.style.opacity = 1;
+    modal.querySelector('.modal-content').style.transform = 'translateY(0)';
+
+    // Pre-fill the input with current name (without extension)
+    const nameWithoutExt = currentName.includes('.')
+        ? currentName.substring(0, currentName.lastIndexOf('.'))
+        : currentName;
+    input.value = nameWithoutExt;
+    input.focus();
+}
+
+function closeRenameModal() {
+    const modal = document.getElementById('renameModal');
+    modal.style.opacity = 0;
+    modal.querySelector('.modal-content').style.transform = 'translateY(-50px)';
+    setTimeout(() => {
+        modal.style.display = 'none';
+    }, 300);
+}
+
+function confirmRename() {
+    const newName = document.getElementById('renameItemName').value.trim();
+
+    if (!newName) {
+        alert('Name cannot be empty');
+        return;
+    }
+
+    // Add back the original extension if it was a file
+    const fullNewName = currentItemType === 'file' && currentItemName.includes('.')
+        ? `${newName}.${currentItemName.split('.').pop()}`
+        : newName;
+
+    fetch('/rename', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            oldPath: currentItemPath,
+            newName: fullNewName
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+            closeRenameModal();
+            closeOptionsPanel();
+            window.location.reload();
+        } else {
+            alert('Error: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while renaming.');
+    });
+}

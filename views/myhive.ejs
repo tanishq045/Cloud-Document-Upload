@@ -15,29 +15,15 @@
         </div>
     <div class="upload-section">
         <ul class="sidebar-menu">
-            <li>
-            <a href="#" id="new-folder">
-                <img src="/plusicon.png" alt="Plus Icon" class="plus-icon"> New Folder
-            </a>
-        </li>
-            <li>
-            <a href="#" id="upload-file">
-                <img src="/plusicon.png" alt="Plus Icon" class="plus-icon"> Upload File
-            </a>
-        </li>
-        <li>
-            <a href="#" id="upload-folder">
-                <img src="/plusicon.png" alt="Plus Icon" class="plus-icon"> Upload Folder
-            </a>
-        </li>
+            <li><a href="#" id="new-folder"><img src="/plusicon.png" alt="Plus Icon" class="plus-icon"> New Folder</a></li>
+            <li><a href="#" id="upload-file"><img src="/plusicon.png" alt="Plus Icon" class="plus-icon"> Upload File</a></li>
+            <li><a href="#" id="upload-folder"><img src="/plusicon.png" alt="Plus Icon" class="plus-icon"> Upload Folder</a></li>
         </ul>
     </div>
         <ul class="sidebar-menu">
             <li><a href="#"><img src="/homeicon.png" alt="My Hive Icon" class="sidebar-icon"> My Hive</a></li>
             <li><a href="#"> <img src="/analyicon.jpg" alt="Analytics Icon" class="sidebar-icon"> Analytics</a></li>
-            <li>
-                <a href="#"> <img src="/aiicon.png" alt="Hive AI Icon" class="sidebar-icon"> Hive AI</a>
-            </li>
+            <li><a href="#"> <img src="/aiicon.png" alt="Hive AI Icon" class="sidebar-icon"> Hive AI</a></li>
             <li><a href="#"><img src="/adminicon.png" alt="Admin Console Icon" class="sidebar-icon"> Admin Console</a></li>
             <li><a href="#"><img src="/usericon.png" alt="User Icon" class="sidebar-icon"> Rujul Pawar</a></li>
         </ul>
@@ -45,7 +31,7 @@
 
 <script src="/actions.js"></script>
 
-     <div class="content">
+<div class="content">
 
 <div class="search-bar-wrapper">
             <div class="search-bar-container">
@@ -60,6 +46,7 @@
                 </div>
             </div>
         </div>
+
         <!-- Breadcrumb Navigation -->
         <div class="breadcrumb">
             <a href="/myhive">My Hive</a>
@@ -73,8 +60,8 @@
             <% } %>
         </div>
 
-        <!-- Folders Section -->
-        <h2>Folders</h2>
+<!-- Folders Section -->
+<h2>Folders</h2>
 <% if (folders && folders.length > 0) { %>
     <div class="folder-container">
         <% folders.forEach(function(folder) { %>
@@ -110,6 +97,10 @@
                             <img src="/pdficon.png" alt="PDF" class="pdf-icon">
                             <span><%= pdf.name %></span>
                         </a>
+                    <!-- Vertical three dots for options -->
+                    <div class="folder-options">
+                        <span class="vertical-dots">⋮</span>
+                    </div>
                     </div>
                 <% }); %>
             </div>
@@ -132,6 +123,39 @@
             </div>
         </div>
     </div>
+
+    <div id="renameModal" class="modal">
+    <div class="modal-content">
+        <h2>Rename Item</h2>
+        <input type="text" id="renameItemName" placeholder="Enter new name" />
+        <div class="modal-buttons">
+            <button class="create" onclick="confirmRename()">Rename</button>
+            <button class="cancel" onclick="closeRenameModal()">Cancel</button>
+        </div>
+    </div>
+    </div>
+
+<div class="options-panel-overlay"></div>
+    <div class="options-panel">
+    <!-- Close Icon -->
+    <img src="/closeicon.png" alt="Close" class="close-icon" id="close-panel">
+
+    <!-- Panel Title -->
+    <div class="panel-header">
+        <img src="" alt="Icon" id="item-icon" class="item-icon">
+        <h3 id="panel-title">Folder/File Name</h3>
+    </div>
+
+    <!-- Panel Content -->
+    <div class="options-panel-content">
+        <div class="options-panel-item" id="download-option">
+            <span>Download</span>
+        </div>
+        <div class="options-panel-item" id="rename-option">
+            <span>Rename</span>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
